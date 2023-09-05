@@ -8,27 +8,27 @@ class ChatController
 {
     MessageHandler = async (context) =>
     {
-        if(context.command.match(/^кто я/))
+        if(context.command?.match(/^кто я/))
         {
             await context.send(context.user.GetInfo())
             return
         }
-        if(context.command.match(/^выдать прав/))
+        if(context.command?.match(/^выдать прав/))
         {
             await this.GiveRight(context)
             return
         }
-        if(context.command.match(/^забрать прав/))
+        if(context.command?.match(/^забрать прав/))
         {
             await this.PickUpRight(context)
             return
         }
-        if(context.command.match(/^!админ/))
+        if(context.command?.match(/^!админ/))
         {
             await this.SetAdminRights(context)
             return
         }
-        if(context.command.match(/^бот режим/))
+        if(context.command?.match(/^бот режим/))
         {
             await this.ChangeBotMode(context)
             return
@@ -38,7 +38,7 @@ class ChatController
             await this.ReplyRequest(context)
             return true
         }
-        if(context.command.match(/^!|^\/|^бот/) && context.user.canUseBot)
+        if(context.command?.match(/^!|^\/|^бот/) && context.user.canUseBot)
         {
             await this.GPTRequest(context)
         }

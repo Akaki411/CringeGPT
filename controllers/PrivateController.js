@@ -5,17 +5,17 @@ class PrivateController
 {
     MessageHandler = async (context) =>
     {
-        if(context.command.match(/^начать/))
+        if(context.command?.match(/^начать/))
         {
             await context.send("Привет.\n\nℹ Это бот, который может отвечать на твои вопросы. Он основан на нейросети ChatGPT, а именно на модели GPT 3.5 Turbo.\n\n❗ Для того чтобы бот начал отвечать вам свяжитесь с одним из администраторов и он выдаст вам право. К кому обращаться вы знаете сами, так как этот бот написан за один вечер специально для того, чтобы облегчить выполнение домашнего задания для группы КЭ-105", {keyboard: Keyboard.keyboard([])})
             return
         }
-        if(context.command.match(/^кто я/))
+        if(context.command?.match(/^кто я/))
         {
             await context.send(context.user.GetInfo())
             return
         }
-        if(!context.user.canUseBot)
+        if(!context.user?.canUseBot)
         {
             await context.send("⚠ Сейчас вы не можете пользоваться ботом, чтобы открыть эту возможность - обратитесь к админам.", {keyboard: Keyboard.keyboard([])})
             return
