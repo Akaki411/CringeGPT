@@ -11,7 +11,7 @@ class User
 
     GetInfo()
     {
-        return `*${this.id}(${this.nick})\n\nСтатус: ${this.status}\nРоль: ${this.role === "user" ? "Пользователь" : "Админ"}`
+        return `*id${this.id}(${this.nick})\n\nСтатус: ${this.status}\nРоль: ${this.role === "user" ? "Пользователь" : "Админ"}`
     }
 }
 
