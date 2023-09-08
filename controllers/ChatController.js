@@ -1,17 +1,21 @@
 const GPT = require("./GPTController")
-const ChatGPTModes = require("../models/BotCallModels")
-const API = require("./API");
-const {User} = require("../database/models");
 const Data = require("../data/Data")
 const Settings = require("./Settings")
+const API = require("./API");
+const {User} = require("../database/models");
 
 class ChatController
 {
     MessageHandler = async (context) =>
     {
-        if(context.command?.match(/^кто я/))
+        if(context.command?.match(/^!жереб.[её]вка/))
         {
-            await context.send(context.user.GetInfo())
+            await this.Randomize(context)
+            return
+        }
+        if(context.command?.match(/^!игнор/))
+        {
+            await this.IgnoreUser(context)
             return
         }
         await Settings.MessageHandler(context, async () =>
@@ -27,6 +31,66 @@ class ChatController
             }
         })
     }
+
+    async IgnoreUser(context)
+    {
+        try
+        {
+            if(context.replyUsers.length === 0)
+            {
+                await context.send("⚠ Укажите пользователя")
+                return
+            }
+            if(context.chat.ignore.contains(context.replyUsers[0]))
+            {
+                context.chat.ignore = context.chat.ignore.filter(key => {return key !== context.replyUsers[0]})
+            }
+            else
+            {
+                context.chat.ignore.push(context.replyUsers[0])
+            }
+            await context.chat.Save()
+        }
+        catch (e)
+        {
+            console.log(e)
+        }
+    }
+
+    async Randomize(context)
+    {
+        try
+        {
+            const chatInfo = await API.messages.getConversationMembers({peer_id: context.peerId})
+            let chatMembers = []
+            let prefix = context.text.replace(/^!жереб.[её]вка/, "")
+            prefix = prefix.length > 0 ? prefix : ""
+            let names = {}
+            for(const profile of chatInfo.profiles)
+            {
+                names[profile.id] = `@id${profile.id}(${profile.first_name + " " + profile.last_name})`
+                chatMembers.push(profile.id)
+            }
+            const newList = []
+            while(chatMembers.length > 0)
+            {
+                let i = Math.floor(Math.random() * chatMembers.length)
+                newList.push(chatMembers[i])
+                chatMembers = chatMembers.filter(key => {return key !== chatMembers[i]})
+            }
+            let request = `Результат жеребьевки ${prefix}\n\n`
+            for(let i = 0; i < newList.length; i++)
+            {
+                request += (i+1) + ": " + names[newList[i]] + "\n"
+            }
+            await context.send(request, {disable_mentions: true})
+        }
+        catch (e)
+        {
+            console.log(e)
+        }
+    }
+
     async ReplyRequest(context)
     {
         try

@@ -15,7 +15,7 @@ module.exports = async (context, next) =>
     {
         const chat = await VKChats.findOrCreate({
             where: {id: context.peerId},
-            defaults: {id: context.peerId, botModeId: 0}
+            defaults: {id: context.peerId, botModeId: 0, ignore: JSON.stringify([])}
         })
         Data.VKchats[context.peerId] = new VKChat(chat[0])
         context.chat = Data.VKchats[context.peerId]

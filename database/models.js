@@ -12,7 +12,8 @@ const User = sequelize.define("user", {
 
 const VKChats = sequelize.define("vk-chat", {
     id: {type: DataTypes.INTEGER, unique: true, primaryKey: true},
-    botModeId: {type: DataTypes.INTEGER, allowNull: false, defaultValue: 0}
+    botModeId: {type: DataTypes.INTEGER, allowNull: false, defaultValue: 0},
+    ignore: {type: DataTypes.TEXT, allowNull: false, defaultValue: "[]"}
 })
 
 module.exports = {

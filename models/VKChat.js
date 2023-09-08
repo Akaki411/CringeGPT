@@ -7,6 +7,7 @@ class VKChat
     {
         this.id = chat.dataValues.id
         this.mode = null
+        this.ignore = JSON.parse(chat.dataValues.ignore)
         let temp = null
         for(const i of Object.keys(botMods))
         {
@@ -41,6 +42,10 @@ class VKChat
             await VKChats.update({botModeId: 0}, {where: {id: this.id}})
             this.mode = null
         }
+    }
+    async Save()
+    {
+        await VKChats.update({botModeId: this.mode ? this.mode.id : 0, ignore: JSON.stringify(this.ignore)}, {where: {id: this.id}})
     }
 }
 
