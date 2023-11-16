@@ -57,7 +57,10 @@ class PrivateController
                 await context.send(sample)
             }
         }
-        catch (e) {}
+        catch (e)
+        {
+            await context.send("⚠ Ошибка генерации текста: " + e.message)
+        }
     }
 }
 
